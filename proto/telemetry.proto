@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package telemetry.v1;
+
+
+// One GPS position fix.
+message GpsFix {
+  double latitude_deg = 1;
+  double longitude_deg = 2;
+  float altitude_m = 3;
+}
+
+// Inertial measurement unit: acceleration and rotation rate.
+message Imu {
+  float accel_x_mps2 = 1;
+  float accel_y_mps2 = 2;
+  float accel_z_mps2 = 3;
+  float gyro_x_dps = 4;
+  float gyro_y_dps = 5;
+  float gyro_z_dps = 6;
+}
+
+// One snapshot of a vehicle's state.
+message TelemetryFrame {
+  string vehicle_id = 1;
+  uint64 sequence = 2;       // increases by 1 per frame, per vehicle
+  int64 timestamp_ns = 3;    // UTC, nanoseconds since the Unix epoch
+  GpsFix gps = 4;
+  float speed_mps = 5;       // meters per second
+  Imu imu = 6;
+}
+
+// What a vehicle uploads: many frames at once.
+message UploadBatch {
+  string batch_id = 1;
+  string vehicle_id = 2;
+  int64 created_at_ns = 3;
+  repeated TelemetryFrame frames = 4;
+}

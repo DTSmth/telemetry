@@ -1,0 +1,1 @@
+"""Simulated vehicle telemetry fleet with fault injection."""
